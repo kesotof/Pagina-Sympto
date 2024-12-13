@@ -11,7 +11,9 @@
     --small-dot-color: rgba(23, 163, 152, 0.5);
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --animation-speed: 4s;
+    --animation-speed: 10s;
+    --section-blur: 30px;
+    --section-spacing: clamp(1rem, 8vh, 8rem);
   }
   
   * {
@@ -19,6 +21,40 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+  img, picture, video {
+    max-width: 100%;
+    display: block;
+    height: auto;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.grid {
+    display: grid;
+    gap: var(--flex-gap);
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 300px), 1fr)
+    );
+}
+
+  /* globales */
+    section{
+        padding: var(--section-spacing) 0rem;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 2.5vw, 2.5rem);
+    }
+
+    h2 {
+        font-size: clamp(1.75rem, 2vw, 2rem);
+    }
+
+    h3 {
+        font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+    }
   
   /* Animaciones de fondo */
   @keyframes bg {
@@ -55,24 +91,31 @@
     font-family: system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     color: var(--gray-900);
+  }
+
+  body {
     background-color: var(--background-color);
     background-image: 
-      radial-gradient(circle at top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)),
-      linear-gradient(135deg, #03678D, #00A896, #001F3F);
+        radial-gradient(circle at top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)),
+        linear-gradient(135deg, #03678D, #00A896, #001F3F);
     background-size: 200% 200%;
-    animation: calc(var(--animation-speed) * 2) bg infinite alternate;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
   }
   
   /* Spinner de fondo */
   .main_spinner {
     position: fixed;
-    animation: calc(var(--animation-speed) * 2) spin linear infinite;
+    animation: var(--animation-speed) spin linear infinite;
     width: 150px;
     height: 150px;
-    z-index: -1;
+    z-index: 0;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    pointer-events: none;
   }
   
   .dot {
@@ -104,6 +147,11 @@
       30px 0 var(--small-dot-color), 
       -30px 0 var(--small-dot-color);
   }
+
+  .dot_1, .dot_2, .center_mass {
+    will-change: transform; /* Optimize animation performance */
+    backface-visibility: hidden;
+  }
   
   /* Navegación */
   .navbar {
@@ -111,7 +159,8 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: transparent;
+    /* background-color: transparent; */
+    background-color: rgba(0, 0, 0, 0.6); /* Slight transparency */
     z-index: 50;
 }
   
@@ -256,17 +305,29 @@
     height: 1.5rem;
   }
 
+  .inicio-section {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
 .inicio-section .container {
     max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    margin: 4rem auto 3rem;
-  }
+    gap: 4rem;
+    flex: 1;
+}
+
+.inicio-section .content {
+    flex: 1;
+}
+
+.inicio-section .image {
+    flex: 1;
+}
 
   .inicio-section h2 {
     font-size: 3.25rem;
@@ -305,19 +366,12 @@
 
   .inicio-section .image img {
     width: 100%;
+    height: auto;
     border-radius: 0.5rem;
     transition: transform 0.3s ease;
   }
 
   .problematica-section {
-    max-width: 1400px;
-    margin: 10rem auto 300px;
-    padding: 4rem 1rem;
-    position: relative;
-    z-index: 1;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -378,7 +432,7 @@
 
 @media (max-width: 768px) {
     .problematica-section {
-        margin: 2rem 1rem;
+        margin: 2rem 0rem;
         padding: 2rem 1rem;
     }
 
@@ -392,14 +446,6 @@
 }
 
 .solucion-section {
-    max-width: 1400px;
-    margin: 0 auto 250px;
-    padding: 4rem 1rem;
-    position: relative;
-    z-index: 1;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -444,10 +490,7 @@
 }
 
 @media (max-width: 768px) {
-    .solucion-section {
-        margin: 2rem 1rem;
-        padding: 2rem 1rem;
-    }
+
 
     .solucion-content h2 {
         font-size: 2rem;
@@ -459,12 +502,6 @@
 }
 
 .busqueda-section {
-    max-width: 1400px;
-    margin: 8rem auto;
-    padding: 5rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -531,18 +568,10 @@
     }
     
     .busqueda-section {
-        margin: 4rem 1rem;
-        padding: 3rem 1.5rem;
     }
 }
 
 .recordatorios-section {
-    max-width: 1400px;
-    margin: 8rem auto;
-    padding: 5rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -588,19 +617,9 @@
         grid-template-columns: 1fr;
     }
     
-    .recordatorios-section {
-        margin: 4rem 1rem;
-        padding: 3rem 1.5rem;
-    }
 }
 
 .sintomas-foro-section {
-    max-width: 1400px;
-    margin: 8rem auto;
-    padding: 5rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -646,19 +665,9 @@
         grid-template-columns: 1fr;
     }
     
-    .sintomas-foro-section {
-        margin: 4rem 1rem;
-        padding: 3rem 1.5rem;
-    }
 }
 
 .videos-section {
-    max-width: 1400px;
-    margin: 8rem auto;
-    padding: 5rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -704,20 +713,9 @@
         grid-template-columns: 1fr;
     }
     
-    .videos-section {
-        margin: 4rem 1rem;
-        padding: 3rem 1.5rem;
-    }
 }
 
 .final-section {
-    max-width: 1200px;
-    margin: 8rem auto;
-    padding: 6rem 2rem;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -737,10 +735,6 @@
 }
 
 @media (max-width: 768px) {
-    .final-section {
-        margin: 4rem 1rem;
-        padding: 3rem 1.5rem;
-    }
 
     .final-section h2 {
         font-size: 3rem;
@@ -754,12 +748,6 @@
 
 
 .mapas-section {
-    max-width: 1400px;
-    margin: 8rem auto;
-    padding: 5rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
     color: var(--white);
 }
 
@@ -805,8 +793,38 @@
         grid-template-columns: 1fr;
     }
     
-    .mapas-section {
-        margin: 4rem 1rem;
-        padding: 3rem 1.5rem;
-    }
+}
+
+.problematica-container,
+.solucion-container,
+.busqueda-container,
+.recordatorios-container,
+.sintomas-foro-container,
+.videos-container,
+.mapas-container,
+.final-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(0.1rem, 5vw, 4rem);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+}
+
+.btn-hero {
+    background: linear-gradient(45deg, #4CAF50, #2196F3);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-hero:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
